@@ -3,9 +3,12 @@ os:
 install:
   - curl -L -O http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg
   - sudo installer -pkg BasicTeX.pkg -target /
+  - rm BasicTeX.pkg
   - export PATH=$PATH:/usr/texbin
   - sudo tlmgr update --self --all
-  - sudo tlmgr install collection-latexextra collection-luatex collection-langjapanese
+  - sudo tlmgr install collection-langjapanese
+  #- sudo tlmgr install collection-latexextra collection-luatex collection-langjapanese
+before_script:
   - sudo mkdir -p /usr/local/texlive/2015basic/texmf-local/fonts/opentype/public/hiragino/
   - cd /usr/local/texlive/2015basic/texmf-local/fonts/opentype/public/hiragino/
   - sudo ln -s "/Library/Fonts/ヒラギノ明朝 Pro W3.otf" HiraMinPro-W3.otf
@@ -23,11 +26,11 @@ install:
   - sudo mktexlsr
   - cd -
   - sudo kanji-config-updmap-sys hiragino-pron
-  - sudo fmtutil-sys --byfmt lualatex
+  #- sudo fmtutil-sys --byfmt lualatex
 script:
   - platex src/platex.tex
   - dvipdfmx platex
-  - lualatex src/lualatex.tex
+  #- lualatex src/lualatex.tex
 after_success:
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\nIdentityFile ~/.ssh/deploy.key\n" >> ~/.ssh/config
   - openssl aes-256-cbc -k "$SERVER_KEY" -in deploy_key.enc -d -a -out deploy.key
@@ -38,9 +41,11 @@ after_success:
   - git fetch origin gh-pages:gh-pages
   - git stash -u
   - git checkout gh-pages
-  - rm platex.pdf lualatex.pdf
+  - rm platex.pdf
+  #- rm platex.pdf lualatex.pdf
   - git stash pop
-  - git add platex.pdf lualatex.pdf
+  - git add platex.pdf
+  #- git add platex.pdf lualatex.pdf
   - git commit -a -m "auto commit on travis $TRAVIS_JOB_NUMBER $TRAVIS_COMMIT"
   - git push git@github.com:y-yu/travis-tex.git gh-pages:gh-pages
 env:
