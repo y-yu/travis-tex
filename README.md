@@ -11,3 +11,4 @@ Travis-TeX
 下記のリンクまたは`gh-pages`ブランチを参照するとよい。
 
 - [platex.pdf](https://y-yu.github.io/travis-tex/platex.pdf)
+- [lualatex.pdf](https://y-yu.github.io/travis-tex/lualatex.pdf)
